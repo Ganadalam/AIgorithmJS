@@ -1,18 +1,10 @@
+// reduce() Map chaining , reduce() 곱셈, 체인 끝 -1 처리 => 시간복잡도: O(n)  
 function solution(clothes) {
-    let clothesMap = new Map();
-    
-    for (let [item, category] of clothes) {
-        if (clothesMap.has(category)) {
-            clothesMap.set(category, clothesMap.get(category) + 1);
-        } else {
-            clothesMap.set(category, 1);
-        }
-    }
-    
-    let answer = 1;     // 각 의상 종류마다 선택할 수 있는 경우의 수는 (해당 의상 개수 + 1).
-    for (let count of clothesMap.values()) {
-        answer *= (count + 1);
-    }
-    return answer - 1;         // 최소 한 개의 의상은 입어야 하므로 1을 빼.
+  return [...clothes.reduce((map, [, type]) =>
+    map.set(type, (map.get(type) || 0) + 1), new Map()
+  ).values()]
+    .reduce((acc, count) => acc * (count + 1), 1) - 1;
 }
 
+// 기존: O(n), 카테고리 수: for 반복 + 조건분기  
+// 곱셈: for.. of 순차 곱셈 ,반환: answer - 1
